@@ -24,17 +24,16 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-	
+
 	String message = "User not found with id: ";
 
 	private UserService userService;
 	private EventService eventService;
-	
+
 	public UserController(UserService userService, EventService eventService) {
 		this.userService = userService;
 		this.eventService = eventService;
 	}
-
 
 	// get all
 	@GetMapping
@@ -46,8 +45,8 @@ public class UserController {
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable int id) throws UserNotFoundException {
 		User user = userService.getById(id);
-		if(user==null) {
-			throw new UserNotFoundException(message +id);
+		if (user == null) {
+			throw new UserNotFoundException(message + id);
 		}
 		return ResponseEntity.ok(user);
 	}
@@ -61,10 +60,11 @@ public class UserController {
 
 	// update
 	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody @Valid User user) throws UserNotFoundException {
+	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody @Valid User user)
+			throws UserNotFoundException {
 		User userOptional = userService.getById(id);
-		if(userOptional==null) {
-			throw new UserNotFoundException(message +id);
+		if (userOptional == null) {
+			throw new UserNotFoundException(message + id);
 		}
 		user.setId(id);
 		userService.update(user);
@@ -75,26 +75,26 @@ public class UserController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable int id) throws UserNotFoundException {
 		User user = userService.getById(id);
-		if(user==null) {
-			throw new UserNotFoundException(message +id);
+		if (user == null) {
+			throw new UserNotFoundException(message + id);
 		}
 		userService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	//Register a user to an event
+
+	// Register a user to an event
 	@PostMapping("/{userId}/register-event/{eventId}")
-	public ResponseEntity<String> registerUserToEvent(@PathVariable int userId,@PathVariable int eventId){
+	public ResponseEntity<String> registerUserToEvent(@PathVariable int userId, @PathVariable int eventId) {
 		User user = userService.getById(userId);
 		Event event = eventService.getById(eventId);
 		user.getRegisteredEvents().add(event);
 		userService.save(user);
 		return ResponseEntity.ok("User registered to event successfully");
 	}
-	
-	//Fetch all users registered to an event
+
+	// Fetch all users registered to an event
 	@GetMapping("/events/{eventId}/users")
-	public ResponseEntity<List<User>> getEventUsers(@PathVariable int eventId){
+	public ResponseEntity<List<User>> getEventUsers(@PathVariable int eventId) {
 		Event event = eventService.getById(eventId);
 		return ResponseEntity.ok(event.getRegisteredUsers());
 	}

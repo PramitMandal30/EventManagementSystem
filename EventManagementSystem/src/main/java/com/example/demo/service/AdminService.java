@@ -10,7 +10,7 @@ public interface AdminService {
 	List<Admin> getAll();
 
 	Admin getById(Integer id);
-	
+
 	void update(Admin admin);
 
 	void delete(Integer id);

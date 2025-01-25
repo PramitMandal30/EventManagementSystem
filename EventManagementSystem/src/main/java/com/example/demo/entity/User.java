@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="users")
+@Table(name = "users")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +29,10 @@ public class User {
 	private String email;
 	@NotEmpty(message = "password must not be empty")
 	private String password;
-	@Pattern(regexp = "^\\d{10}$",message = "invalid phone number entered")
+	@Pattern(regexp = "^\\d{10}$", message = "invalid phone number entered")
 	private String phNo;
-	
+
 	@ManyToMany
-	@JoinTable(name = "user_event",
-	joinColumns = @JoinColumn(name = "user_id"),
-	inverseJoinColumns = @JoinColumn(name = "event_id"))
+	@JoinTable(name = "user_event", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
 	private List<Event> registeredEvents = new ArrayList<>();
 }
